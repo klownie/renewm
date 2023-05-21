@@ -2,6 +2,7 @@
 
 This is just a personal side project that I'm working on to learn rust.
 I would highly recommend using `newm-atha` as it is the most stable and professionally maintained repo.
+link to the professionals : https://git.sr.ht/~atha/newm-atha
 
 # Objectif
 
