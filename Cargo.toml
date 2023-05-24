@@ -1,8 +1,13 @@
 [package]
-name = "renewm"
-version = "0.1.0"
+name = "renewm_core"
+version = "0.0.1"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Audrick YEU <audrickyeu@proton.me>"]
+description = "My personnel project on newm rewritten fully in rust"
+license = "GPL-3.0-or-later"
+keywords = ["klownie", "renewm", "repywm", "newm", "pywm", ]
+readme = "README.md"
+repository = "https://github.com/klownie/renewm"
+homepage = "https://github.com/klownie/renewm"
 
 [dependencies]

@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "renewm"
-version = "0.1.0"
+name = "renewm_core"
+version = "0.0.1"
