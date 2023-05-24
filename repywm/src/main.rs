@@ -2,12 +2,12 @@ mod wm {
     // wm.c
     use super::wm_config::WmConfig;
 
-    pub struct Wm {
-        config: WmConfig,
+    struct Wm {
+        server: Option<WmServer>,
     }
 
     impl Wm {
-        pub fn new(config: WmConfig) -> Self {
+        pub fn new(config: WmConfig) {
             //
             Self { config }
         }
@@ -22,12 +22,14 @@ mod wm {
     }
 }
 
+mod wm_composite {}
+
 mod wm_config {
     // wm_config.c
 
     use std::env;
 
-    pub struct wm_config_output {
+    pub struct WmConfigOutput {
         name: String,
         scale: f64,
         width: i32,
@@ -86,14 +88,14 @@ mod wm_config {
             config
         }
 
-        pub fn wm_config_reset_default(&mut self) {
+        pub fn reset_default(&mut self) {
             while let Some(output) = self.outputs.pop_front() {
                 let _ = unsafe { Box::from_raw(output) };
             }
             super::wm_config::WmConfig::default();
         }
 
-        pub fn wm_config_reconfigure(config: &mut self, server: &mut WmServer) {
+        pub fn reconfigure(config: &mut self, server: &mut WmServer) {
             wm_seat_reconfigure(&server.wm_seat);
             wm_layout_reconfigure(&server.wm_layout);
             wm_server_reconfigure(server);
@@ -117,7 +119,17 @@ mod wm_config {
             }
         }
 
-        fn wm_config_get_renderer_mode(&self) -> wm_renderer_mode {
+        fn set_xcursor_theme(&mut self, xcursor_theme: &str) {
+            self.xcursor_theme = Some(xcursor_theme.to_string());
+            self.xcursor_setenv();
+        }
+
+        fn set_xcursor_size(&mut self, xcursor_size: u32) {
+            self.xcursor_size = xcursor_size;
+            self.xcursor_setenv();
+        }
+
+        fn get_renderer_mode(&self) -> wm_renderer_mode {
             if self.renderer_mode == "wlr" {
                 WM_RENDERER_WLR
             } else if self.renderer_mode == "pywm" {
@@ -127,17 +139,7 @@ mod wm_config {
             }
         }
 
-        fn wm_config_set_xcursor_theme(&mut self, xcursor_theme: &str) {
-            self.xcursor_theme = Some(xcursor_theme.to_string());
-            self.xcursor_setenv();
-        }
-
-        fn wm_config_set_xcursor_size(&mut self, xcursor_size: u32) {
-            self.xcursor_size = xcursor_size;
-            self.xcursor_setenv();
-        }
-
-        fn wm_config_add_output(
+        fn add_output(
             &mut self,
             name: &str,
             scale: f64,
@@ -153,7 +155,7 @@ mod wm_config {
                 return;
             }
 
-            let new = wm_config_output {
+            let new = WmConfigOutput {
                 name: name.to_string(),
                 scale,
                 width,
@@ -168,7 +170,7 @@ mod wm_config {
             self.outputs.push(&new.link);
         }
 
-        fn wm_config_find_output(&self, name: &str) -> Option<&wm_config_output> {
+        fn find_output(&self, name: &str) -> Option<&WmConfigOutput> {
             if name.is_empty() {
                 return None;
             }
@@ -182,13 +184,45 @@ mod wm_config {
             None
         }
 
-        fn wm_config_destroy(&mut self) {
+        fn destroy(&mut self) {
             while let Some(output) = self.outputs.pop_front() {
                 let _ = unsafe { Box::from_raw(output) };
             }
         }
     }
 }
+
+mod wm_content {}
+
+mod wm_cursor {}
+
+mod wm_drag {}
+
+mod wm_idle_inhibit {}
+
+mod wm_keyboard {}
+
+mod wm_layout {}
+
+mod wm_output {}
+
+mod wm_pointer {}
+
+mod wm_renderer {}
+
+mod wm_seat {}
+
+mod wm_server {}
+
+mod wm_view {}
+
+mod wm_view_layer {}
+
+mod wm_view_xdg {}
+
+mod wm_view_xwayland {}
+
+mod wm_wigdet {}
 
 // main.c
 fn main() {
