@@ -1,0 +1,13 @@
+[package]
+name = "start-renewm"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+renewm_core = { path = "/home/klownie/Projects/renewm/" }
+
+[[bin]]
+name = "start-renewm"
+path = "main.rs"
