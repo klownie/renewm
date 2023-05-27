@@ -7,7 +7,7 @@ fn main() {
     let mut profile = false;
     let mut config_file: Option<String> = None;
 
-    let args: Vec<String> = env::args().skip(1).collect();
+    let mut args: Vec<String> = env::args().skip(1).collect();
 
     println!("renewm: LIFT OFF!");
     println!("renewm: start-renewm args received: {:?}", args);
