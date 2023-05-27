@@ -39,7 +39,7 @@ pub fn renewm_logger(debug: bool) {
 pub fn run(debug: bool, profile: bool, config_file: Option<&str>) {
     renewm_logger(debug);
 
-    let renewm = super::layout::Layout::new(debug, config_file);
+    let renewm = super::layout::Layout::new(debug, config_file.map(|s| s.to_owned()));
 
     renewm.run()
 }
