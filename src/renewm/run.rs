@@ -2,6 +2,7 @@ use chrono::{DateTime, Local};
 use env_logger::Builder;
 use log::LevelFilter;
 use std::io::Write;
+use std::path::{Path, PathBuf};
 
 pub fn renewm_logger(debug: bool) {
     let mut builder = Builder::new();
@@ -36,10 +37,10 @@ pub fn renewm_logger(debug: bool) {
 
     builder.init();
 }
-pub fn run(debug: bool, profile: bool, config_file: Option<&str>) {
+pub fn run(debug: bool, profile: bool, config_file: Option<PathBuf>) {
     renewm_logger(debug);
 
-    let renewm = super::layout::Layout::new(debug, config_file.map(|s| s.to_owned()));
+    let renewm = super::layout::Layout::new(debug, config_file);
 
     renewm.run()
 }

@@ -1,52 +1,50 @@
 use renewm_core::renewm;
 use std::env;
+use std::path::PathBuf;
 
 fn main() {
-    let mut no_args = false;
     let mut debug = false;
     let mut profile = false;
-    let mut config_file: Option<String> = None;
+    let mut config_file: Option<PathBuf> = None;
 
     let mut args: Vec<String> = env::args().skip(1).collect();
 
     println!("renewm: LIFT OFF!");
     println!("renewm: start-renewm args received: {:?}", args);
 
-    if args.len() == 1 {
+    if args.is_empty() {
         println!("renewm: [WARN] no arguments provided ☜(ˆ▿ˆc) ");
-        no_args = true;
-    }
-
-    if !no_args {
-        if args.contains(&String::from("-d")) || args.contains(&String::from("--debug")) {
-            debug = true;
-            args.iter()
-                .position(|x| x == "-d" || x == "--debug")
-                .map(|index| args.remove(index));
-        }
-
-        if args.contains(&String::from("-p")) || args.contains(&String::from("--profile")) {
-            profile = true;
-            args.iter()
-                .position(|x| x == "-p" || x == "--profile")
-                .map(|index| args.remove(index));
-        }
-
-        if args.contains(&String::from("-c")) || args.contains(&String::from("--config")) {
-            let index = args.iter().position(|x| x == "-c" || x == "--config");
-            if let Some(index) = index {
-                args.remove(index);
-                match args[0] {
-                    None => {
-                        panic!("You forgot to provide a config path with --config ( ˘︹˘ )");
+    } else {
+        let mut index = 0;
+        while index < args.len() {
+            match args[index].as_str() {
+                "-d" | "--debug" => {
+                    debug = true;
+                    args.remove(index);
+                }
+                "-p" | "--profile" => {
+                    profile = true;
+                    args.remove(index);
+                }
+                "-c" | "--config" => {
+                    args.remove(index);
+                    if let Some(path) = args.get(index) {
+                        let path_buf = PathBuf::from(path);
+                        if path_buf.exists() {
+                            config_file = Some(path_buf);
+                        } else {
+                            panic!("(╥︣﹏᷅╥) The specified config path does not exist: {}", path);
+                        }
+                    } else {
+                        panic!("You forgot to provide a config path with --config (╥︣﹏᷅╥) ");
                     }
-                    Some(path) => {
-                        config_file = Some(path.clone());
-                    }
+                }
+                _ => {
+                    index += 1;
                 }
             }
         }
     }
 
-    renewm::run::run(debug, profile, config_file.as_deref());
+    renewm::run::run(debug, profile, config_file);
 }

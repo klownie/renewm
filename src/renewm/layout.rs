@@ -1,5 +1,8 @@
+use super::config::load_config;
+use std::path::PathBuf;
+
 pub struct Layout {
-    config_file: Option<String>,
+    config_file: Option<PathBuf>,
     debug: bool,
     key_processor: KeyProcessor,
     auth_backend: AuthBackend,
@@ -21,9 +24,9 @@ pub struct Layout {
 }
 
 impl Layout {
-    pub fn new(debug: bool, config_file: Option<String>) -> Self {
+    pub fn new(debug: bool, config_file: Option<PathBuf>) -> Self {
         let config_file_copy = config_file.clone();
-        load_config(&config_file_copy);
+        load_config(config_file_copy);
 
         let key_processor = KeyProcessor::new();
         let auth_backend = AuthBackend::new();
