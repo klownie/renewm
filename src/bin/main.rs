@@ -13,7 +13,7 @@ fn main() {
     println!("renewm: start-renewm args received: {:?}", args);
 
     if args.len() == 1 {
-        println!("renewm: [WARN] no arguments provided");
+        println!("renewm: [WARN] no arguments provided ☜(ˆ▿ˆc) ");
         no_args = true;
     }
 
@@ -36,7 +36,14 @@ fn main() {
             let index = args.iter().position(|x| x == "-c" || x == "--config");
             if let Some(index) = index {
                 args.remove(index);
-                config_file = args.get(0).cloned();
+                match args[0] {
+                    None => {
+                        panic!("You forgot to provide a config path with --config ( ˘︹˘ )");
+                    }
+                    Some(path) => {
+                        config_file = Some(path.clone());
+                    }
+                }
             }
         }
     }
