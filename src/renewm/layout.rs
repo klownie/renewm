@@ -25,62 +25,34 @@ pub struct Layout {
 
 impl Layout {
     pub fn new(debug: bool, config_file: Option<PathBuf>) -> Self {
-        let config_file_copy = config_file.clone();
-        load_config(config_file_copy);
-
-        let key_processor = KeyProcessor::new();
-        let auth_backend = AuthBackend::new();
-        let panel_launcher = PanelsLauncher::new();
-        let dbus_endpoint = DBusEndpoint::new();
-
-        let gesture_providers: Vec<GestureProvider> = vec![];
-
-        let workspaces: Vec<Workspace> = vec![Workspace::new(
-            PyWMOutput::new("dummy", -1, 1.0, 1280, 720, (0, 0)),
-            0,
-            0,
-            1280,
-            720,
-        )];
-
-        let state = LayoutState::new();
-
-        let overlay = None;
-
-        let backgrounds: Vec<Background> = vec![];
-        let top_bars: Vec<TopBar> = vec![];
-        let bottom_bars: Vec<BottomBar> = vec![];
-        let corners: Vec<Vec<Corner>> = vec![];
-        let focus_borders = FocusBorders::new();
-
-        let thread = LayoutThread::new();
-
-        let animations: Vec<Animation> = vec![];
-
-        let idle_inhibit_user = false;
-
-        let active_workspace = (workspaces[0].clone(), None);
+        load_config(config_file.clone());
 
         Layout {
             config_file,
             debug,
-            key_processor,
-            auth_backend,
-            panel_launcher,
-            dbus_endpoint,
-            gesture_providers,
-            workspaces,
-            state,
-            overlay,
-            backgrounds,
-            top_bars,
-            bottom_bars,
-            corners,
-            focus_borders,
-            thread,
-            animations,
-            idle_inhibit_user,
-            active_workspace,
+            key_processor: KeyProcessor::new(),
+            auth_backend: AuthBackend::new(),
+            panel_launcher: PanelsLauncher::new(),
+            dbus_endpoint: DBusEndpoint::new(),
+            gesture_providers: Vec::new(),
+            workspaces: vec![Workspace::new(
+                PyWMOutput::new("dummy", -1, 1.0, 1280, 720, (0, 0)),
+                0,
+                0,
+                1280,
+                720,
+            )],
+            state: LayoutState::new(),
+            overlay: None,
+            backgrounds: Vec::new(),
+            top_bars: Vec::new(),
+            bottom_bars: Vec::new(),
+            corners: Vec::new(),
+            focus_borders: FocusBorders::new(),
+            thread: LayoutThread::new(),
+            animations: Vec::new(),
+            idle_inhibit_user: false,
+            active_workspace: (workspaces[0].clone(), None),
         }
     }
 }
