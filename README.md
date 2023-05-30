@@ -3,7 +3,7 @@
 # Renewm
 
 [Install](#install) • [Documentation] • [FAQ] • [Screenshots] • [Contribute](#contribute)
-("https://raw.githubusercontent.com/klownie/renewm/main/assets/screenshot_exemple.png" )
+<img src="https://raw.githubusercontent.com/klownie/renewm/main/assets/screenshot_exemple.png" style="width: 85%;"/>
 
 </div>
 
