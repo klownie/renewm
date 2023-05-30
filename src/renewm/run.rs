@@ -2,45 +2,46 @@ use chrono::{DateTime, Local};
 use env_logger::Builder;
 use log::LevelFilter;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 pub fn renewm_logger(debug: bool) {
-    let mut builder = Builder::new();
-    builder.format(move |buf, record| {
-        let level = record.level();
-        let timestamp: DateTime<Local> = Local::now();
-        if debug {
-            writeln!(
-                buf,
-                "[{}] {}: {}: {}",
-                level,
-                record.file().unwrap(),
-                record.line().unwrap(),
-                record.args()
-            )
-        } else {
-            writeln!(
-                buf,
-                "[{}] {}: {}",
-                level,
-                timestamp.format("%Y-%m-%d %H:%M:%S"),
-                record.args()
-            )
-        }
-    });
-
-    if debug {
-        builder.filter(None, LevelFilter::Debug);
-    } else {
-        builder.filter(None, LevelFilter::Info);
-    }
-
-    builder.init();
+    Builder::new()
+        .format(move |buf, record| {
+            let level = record.level();
+            let timestamp: DateTime<Local> = Local::now();
+            if debug {
+                writeln!(
+                    buf,
+                    "[{}] {}: {}: {}",
+                    level,
+                    record.file().unwrap(),
+                    record.line().unwrap(),
+                    record.args()
+                )
+            } else {
+                writeln!(
+                    buf,
+                    "[{}] {}: {}",
+                    level,
+                    timestamp.format("%Y-%m-%d %H:%M:%S"),
+                    record.args()
+                )
+            }
+        })
+        .filter(
+            None,
+            if debug {
+                LevelFilter::Debug
+            } else {
+                LevelFilter::Info
+            },
+        )
+        .init();
 }
+
 pub fn run(debug: bool, profile: bool, config_file: Option<PathBuf>) {
     renewm_logger(debug);
 
     let renewm = super::layout::Layout::new(debug, config_file);
-
-    renewm.run()
+    renewm.run();
 }
