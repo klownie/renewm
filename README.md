@@ -5,6 +5,8 @@
 [Install](#install) • [Documentation] • [FAQ] • [Screenshots] • [Contribute](#contribute)
 <img src="https://raw.githubusercontent.com/klownie/renewm/main/assets/screenshot_exemple.png" style="width: 85%;"/>
 
+> exemple screenshot is using newm-atha
+
 </div>
 
 ---
