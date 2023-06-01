@@ -1,13 +1,13 @@
 use renewm_core::renewm;
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 fn main() {
     let mut debug = false;
     let mut profile = false;
     let mut config_file: Option<PathBuf> = None;
 
-    let mut args: Vec<String> = env::args().skip(1).collect();
+    let args: Vec<String> = env::args().skip(1).collect();
 
     println!("renewm: LIFT OFF!");
     println!("renewm: start-renewm args received: {:?}", args);
@@ -20,29 +20,26 @@ fn main() {
             match args[index].as_str() {
                 "-d" | "--debug" => {
                     debug = true;
-                    args.remove(index);
                 }
                 "-p" | "--profile" => {
                     profile = true;
-                    args.remove(index);
                 }
                 "-c" | "--config" => {
-                    args.remove(index);
+                    index += 1;
                     if let Some(path) = args.get(index) {
                         let path_buf = PathBuf::from(path);
                         if path_buf.exists() {
                             config_file = Some(path_buf);
                         } else {
-                            panic!("(╥︣﹏᷅╥) The specified config path does not exist: {}", path);
+                            panic!("The specified config path does not exist: {}", path);
                         }
                     } else {
-                        panic!("You forgot to provide a config path with --config (╥︣﹏᷅╥) ");
+                        panic!("You forgot to provide a config path with --config");
                     }
                 }
-                _ => {
-                    index += 1;
-                }
+                _ => {}
             }
+            index += 1;
         }
     }
 
