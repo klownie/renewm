@@ -1,4 +1,3 @@
-use renewm_core::renewm;
 use std::env;
 use std::path::{Path, PathBuf};
 
@@ -34,10 +33,12 @@ fn main() {
                             panic!("The specified config path does not exist: {}", path);
                         }
                     } else {
-                        panic!("You forgot to provide a config path with --config");
+                        panic!("You forgot to provide a config path in --config <path_to_config> ");
                     }
                 }
-                _ => {}
+                _ => {
+                    panic!("Unknown option {} ", unknown)
+                }
             }
             index += 1;
         }
