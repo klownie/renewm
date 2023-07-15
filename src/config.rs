@@ -1,23 +1,34 @@
-use dirs::home_dir;
-/* use log::debug; */
-use log::error;
-use log::info;
-use std::path::PathBuf;
+pub enum Action {
+    Close,
+    SelectAbove,
+    SelectBelow,
+    ShrinkFront,
+    ExpandFront,
+}
 
-pub fn load_config(path: Option<PathBuf>) {
-    /*  getting default path to config file  */
+pub struct ActionKeyPress {
+    pub modifier: u16,
+    pub keysym: u32,
+    pub action: Action,
+}
 
-    match path {
-        None => {
-            if let Some(home_path) = home_dir() {
-                let path = home_path.join(".config").join("newm").join("config.py");
-                info!("Default config path used : {:?}", path);
-            } else {
-                error!("Failed to get home directory path");
-            }
-        }
-        Some(_) => {
-            info!("Provided config used");
-        }
-    }
+pub struct Command {
+    pub modifier: u16,
+    pub keysym: u32,
+    pub command: String,
+}
+pub struct Config {
+    pub border_thickness: u32,
+    pub border_gap: u32,
+    pub active_border: u32,
+    pub inactive_border: u32,
+    pub workspace_modifier: u16,
+    pub workspace_move_window_modifier: u16,
+    pub autostart: Vec<String>,
+    pub actions: Vec<ActionKeyPress>,
+    pub commands: Vec<Command>,
+}
+
+pub fn get_config() -> Config {
+    todo!()
 }

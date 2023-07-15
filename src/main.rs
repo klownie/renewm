@@ -1,12 +1,11 @@
-use std::env;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 fn main() {
     let mut debug = false;
     let mut profile = false;
     let mut config_file: Option<PathBuf> = None;
 
-    let args: Vec<String> = env::args().skip(1).collect();
+    let args: Vec<String> = std::env::args().skip(1).collect();
 
     println!("renewm: LIFT OFF!");
     println!("renewm: start-renewm args received: {:?}", args);
@@ -36,13 +35,11 @@ fn main() {
                         panic!("You forgot to provide a config path in --config <path_to_config> ");
                     }
                 }
-                _ => {
-                    panic!("Unknown option {} ", unknown)
-                }
+                unknown => panic!("Unknown option {} ", unknown),
             }
             index += 1;
         }
     }
 
-    renewm::run::run(debug, profile, config_file);
+    todo!();
 }
