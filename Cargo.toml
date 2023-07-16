@@ -12,12 +12,13 @@ homepage = "https://github.com/klownie/renewm"
 
 [dependencies]
 anyhow = "1.0.69"
+serde = { version = "1.0.156", features = ["derive"] }
 # log = "0.4.17"
 # env_logger = "0.10.0"
 # chrono = "0.4.24"
 # dirs = "5.0.1"
 #
-# serde = "1.0.171"
+
 
 [dependencies.smithay]
 version = "0.3"
