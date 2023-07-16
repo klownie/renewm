@@ -22,7 +22,7 @@ use smithay::{
 
 use std::ffi::OsString;
 
-pub struct Renewm {
+pub struct RenewmState {
     // Renewm State
     pub start_time: std::time::Instant,
     pub socket_name: OsString,
@@ -44,7 +44,7 @@ pub struct Renewm {
     pub pointer_location: Point<f64, Logical>,
 }
 
-impl SeatHandler for Renewm {
+impl SeatHandler for RenewmState {
     type KeyboardFocus = WlSurface;
     type PointerFocus = WlSurface;
 

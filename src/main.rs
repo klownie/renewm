@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     let mut debug = false;
     let mut profile = false;
     let mut config_file: Option<PathBuf> = None;
@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
             index += 1;
         }
-    }
+    };
 
-    todo!();
+    renewm::winit::run_winit();
 }
