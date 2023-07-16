@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut debug = false;
     let mut profile = false;
     let mut config_file: Option<PathBuf> = None;
