@@ -18,11 +18,11 @@ use smithay::{
     reexports::{
         calloop::EventLoop,
         wayland_protocols::wp::presentation_time::server::wp_presentation_feedback,
-        wayland_server::{protocol::wl_surface, Display},
+        wayland_server::{protocol::wl_surface::WlSurface, Display},
     },
     utils::{IsAlive, Point, Scale, Transform},
     wayland::{
-        compositor,
+        compositor::CompositorClientState,
         dmabuf::{
             DmabufFeedback, DmabufFeedbackBuilder, DmabufGlobal, DmabufHandler, DmabufState,
             ImportError,
@@ -52,7 +52,7 @@ impl Backend for WinitData {
     fn reset_buffers(&mut self, _output: &Output) {
         self.full_redraw = 4;
     }
-    fn early_import(&mut self, _surface: &wl_surface::WlSurface) {}
+    fn early_import(&mut self, _surface: &WlSurface) {}
 }
 
 // Used to store client data associated with Wayland clients

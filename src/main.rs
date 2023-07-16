@@ -39,7 +39,10 @@ fn main() {
             }
             index += 1;
         }
-    };
+    }
 
-    renewm::winit::run_winit();
+    match renewm::winit::run_winit() {
+        Ok(_) => println!("Winit run successfully."),
+        Err(err) => eprintln!("Error while running Winit: {}", err),
+    }
 }
