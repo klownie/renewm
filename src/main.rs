@@ -1,48 +1,64 @@
-use std::path::PathBuf;
+static POSSIBLE_BACKENDS: &[&str] = &[
+    #[cfg(feature = "winit")]
+    "--winit : Run anvil as a X11 or Wayland client using winit.",
+    #[cfg(feature = "udev")]
+    "--tty-udev : Run anvil as a tty udev client (requires root if without logind).",
+    #[cfg(feature = "x11")]
+    "--x11 : Run anvil as an X11 client.",
+];
+
+#[cfg(feature = "profile-with-tracy")]
+#[global_allocator]
+static GLOBAL: profiling::tracy_client::ProfiledAllocator<std::alloc::System> =
+    profiling::tracy_client::ProfiledAllocator::new(std::alloc::System, 10);
 
 fn main() {
-    let mut debug = false;
-    let mut profile = false;
-    let mut config_file: Option<PathBuf> = None;
-
-    let args: Vec<String> = std::env::args().skip(1).collect();
-
-    println!("renewm: LIFT OFF!");
-    println!("renewm: start-renewm args received: {:?}", args);
-
-    if args.is_empty() {
-        println!("renewm: [WARN] no arguments provided ☜(ˆ▿ˆc) ");
+    if let Ok(env_filter) = tracing_subscriber::EnvFilter::try_from_default_env() {
+        tracing_subscriber::fmt()
+            .compact()
+            .with_env_filter(env_filter)
+            .init();
     } else {
-        let mut index = 0;
-        while index < args.len() {
-            match args[index].as_str() {
-                "-d" | "--debug" => {
-                    debug = true;
-                }
-                "-p" | "--profile" => {
-                    profile = true;
-                }
-                "-c" | "--config" => {
-                    index += 1;
-                    if let Some(path) = args.get(index) {
-                        let path_buf = PathBuf::from(path);
-                        if path_buf.exists() {
-                            config_file = Some(path_buf);
-                        } else {
-                            panic!("The specified config path does not exist: {}", path);
-                        }
-                    } else {
-                        panic!("You forgot to provide a config path in --config <path_to_config> ");
-                    }
-                }
-                unknown => panic!("Unknown option {} ", unknown),
-            }
-            index += 1;
-        }
+        tracing_subscriber::fmt().compact().init();
     }
 
-    match renewm::winit::run_winit() {
-        Ok(_) => println!("Winit run successfully."),
-        Err(err) => eprintln!("Error while running Winit: {}", err),
+    #[cfg(feature = "profile-with-tracy")]
+    profiling::tracy_client::Client::start();
+
+    profiling::register_thread!("Main Thread");
+
+    #[cfg(feature = "profile-with-puffin")]
+    let _server = puffin_http::Server::new(&format!("0.0.0.0:{}", puffin_http::DEFAULT_PORT)).unwrap();
+    #[cfg(feature = "profile-with-puffin")]
+    profiling::puffin::set_scopes_on(true);
+
+    let arg = ::std::env::args().nth(1);
+    match arg.as_ref().map(|s| &s[..]) {
+        #[cfg(feature = "winit")]
+        Some("--winit") => {
+            tracing::info!("Starting anvil with winit backend");
+            anvil::winit::run_winit();
+        }
+        #[cfg(feature = "udev")]
+        Some("--tty-udev") => {
+            tracing::info!("Starting anvil on a tty using udev");
+            anvil::udev::run_udev();
+        }
+        #[cfg(feature = "x11")]
+        Some("--x11") => {
+            tracing::info!("Starting anvil with x11 backend");
+            anvil::x11::run_x11();
+        }
+        Some(other) => {
+            tracing::error!("Unknown backend: {}", other);
+        }
+        None => {
+            println!("USAGE: anvil --backend");
+            println!();
+            println!("Possible backends are:");
+            for b in POSSIBLE_BACKENDS {
+                println!("\t{}", b);
+            }
+        }
     }
 }

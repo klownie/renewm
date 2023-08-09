@@ -1,6 +1,0 @@
-[submodule "newm-atha"]
-	path = newm-atha
-	url = https://git.sr.ht/~atha/newm-atha
-[submodule "pywm-atha"]
-	path = pywm-atha
-	url = https://git.sr.ht/~atha/pywm-atha
